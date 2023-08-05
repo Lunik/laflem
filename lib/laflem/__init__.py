@@ -13,7 +13,9 @@ def main():
   '''
   Main function for laflem.
   '''
-  flem = Flem()
+  flem = Flem(
+    version=__version__
+  )
   args = flem.parser.parse_args()
 
   try:

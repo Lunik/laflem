@@ -32,6 +32,9 @@ class Flem:
     'git': GitCollection,
   }
 
+  def __init__(self, version):
+    self.version = version
+
   def get_collection(self, name):
     '''
     Return an instance of the requested collection if it exists.
@@ -48,18 +51,29 @@ class Flem:
     Construct the parser for laflem.
     Returns an instance of FlemParser.
     '''
-    parser = FlemParser(description='Process some integers.')
+    parser = FlemParser(description='Process some integers.', epilog=f"version : {sys.argv[0]}@{self.version}")
 
     subparsers = parser.add_subparsers(help='collection', dest='collection')
     subparsers.required = True
     for collection in self.collections.values():
-      collection_parser = subparsers.add_parser(collection.name, help=collection.description)
+      collection_parser = subparsers.add_parser(
+        collection.name,
+        help=collection.description,
+        description=collection.description,
+      )
+
       collection.build_parser(collection_parser)
 
       collection_subparsers = collection_parser.add_subparsers(help='module', dest='module')
       collection_subparsers.required = True
       for module in collection.modules.values():
-        module_parser = collection_subparsers.add_parser(module.name, help=module.description)
+        module_parser = collection_subparsers.add_parser(
+          module.name,
+          help=module.description,
+          description=module.description,
+          epilog=f"version : {collection.name}.{module.name}@{module.version}"
+        )
+
         module.build_parser(module_parser)
 
     return parser
