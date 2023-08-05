@@ -5,7 +5,12 @@
 ### Features
 
 - Upgrade the `git.setup` module :
-  - Add new aliases for `git` commands : `plr`, `rh`, `t`
+ - Add new aliases for `git` commands : `plr`, `rh`, `t`
+- Add a new `lf` alias binary
+
+### Changes
+
+- Move the `laflem` script to a package "entry point"
 
 ### Fixes
 

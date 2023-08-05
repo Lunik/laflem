@@ -92,7 +92,6 @@ tasks:
     sources:
       - setup.py
       - lib/**/*
-      - scripts/**/*
       - configs/**/*
     generates:
       - dist/**/*
@@ -115,13 +114,12 @@ tasks:
     cmds:
       - >
         {{ .PYLINT_BIN }}
-        lib scripts setup.py
+        lib setup.py
         | 
         tee
         "{{ .CHECKS_DIR }}/pylint.result.txt"
     sources:
       - lib/**/*
-      - scripts/**/*
       - tests/**/*
       - setup.py
     generates:
@@ -203,7 +201,7 @@ tasks:
     cmds:
       - >
         {{ .PYTHON_BIN }}
-        scripts/laflem
+        -c "import sys; sys.argv[0] = '{{ .NAME }}'; from {{ .NAME }} import main; main()"
         {{ .CLI_ARGS }}
 
   run:

@@ -32,7 +32,12 @@ setup(
   data_files=[
     ('configs/laflem', [os.path.join(root, file) for root, _, files in os.walk('configs') for file in files]),
   ],
-  scripts=['scripts/laflem'],
+  entry_points={
+    'console_scripts': [
+      'lf = laflem:main',
+      'laflem = laflem:main'
+    ],
+  },
   python_requires=">=3.8.0",
   install_requires = [
     "rich==13.*",
