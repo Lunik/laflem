@@ -1,0 +1,226 @@
+---
+
+version: '3'
+
+vars:
+  NAME: laflem
+  VENV_DIR: venv
+  CHECKS_DIR: .checks
+  PYTHON_BIN: "{{ .VENV_DIR }}/bin/python3"
+  PIP_BIN: "{{ .VENV_DIR }}/bin/pip3"
+  PYTEST_BIN: "{{ .VENV_DIR }}/bin/pytest"
+  PYLINT_BIN: "{{ .VENV_DIR }}/bin/pylint"
+  TWINE_BIN: "{{ .VENV_DIR }}/bin/twine"
+  FLEM_BIN: "{{ .VENV_DIR }}/bin/laflem"
+
+tasks:
+  venv:
+    run: once
+    internal: true
+    desc: Setup the python virtual environment
+    cmds:
+      - >
+        python3
+        -m venv
+        {{ .VENV_DIR }}
+    status:
+      - test -f "{{ .VENV_DIR }}/bin/activate"
+
+  uninstall-package:
+    run: once
+    internal: true
+    desc: Uninstall a package
+    cmds:
+      - >
+        {{ .PIP_BIN }}
+        uninstall
+        --yes
+        {{ .PACKAGE }}
+    status:
+      - >
+        ! {{ .PIP_BIN }}
+          list
+          | grep
+          {{ .PACKAGE }}
+
+  install-dependencies:
+    deps: [ venv ]
+    internal: false
+    desc: Install a package
+    cmds:
+      - >
+        {{ .PIP_BIN }}
+        install
+        {{ .PACKAGE }}
+
+  install:
+    run: once
+    deps: [ venv ]
+    desc: Install application dependencies
+    cmds:
+      - task: install-dependencies
+        vars:
+          PACKAGE: '.'
+      - task: uninstall-package
+        vars:
+          PACKAGE: "{{ .NAME }}"
+    sources:
+      - setup.py
+    generates:
+      - "{{ .VENV_DIR }}/*"
+
+  install-dev:
+    run: once
+    deps: [ venv ]
+    desc: Install application dependencies for development
+    cmds:
+      - task: install-dependencies
+        vars:
+          PACKAGE: '.[dev]'
+    sources:
+      - setup.py
+    generates:
+      - "{{ .VENV_DIR }}/*"
+
+  build:
+    deps: [ venv, install-dev ]
+    desc: Build and compile the application
+    cmds:
+      - >
+        {{ .PYTHON_BIN }}
+        -m build
+    sources:
+      - setup.py
+      - lib/**/*
+      - scripts/**/*
+      - configs/**/*
+    generates:
+      - dist/**/*
+
+  check_folder:
+    internal: true
+    run: once
+    desc: Create the check results directory
+    cmds:
+      - >
+        mkdir
+        -p
+        "{{ .CHECKS_DIR }}"
+    status:
+      - test -d "{{ .CHECKS_DIR }}"
+
+  lint:
+    deps: [ venv, install-dev, check_folder ]
+    desc: Run pylint on the application
+    cmds:
+      - >
+        {{ .PYLINT_BIN }}
+        lib scripts
+        | 
+        tee
+        "{{ .CHECKS_DIR }}/pylint.result.txt"
+    sources:
+      - lib/**/*
+      - scripts/**/*
+      - tests/**/*
+    generates:
+      - "{{ .CHECKS_DIR }}/pylint.result.txt"
+
+  test:
+    deps: [ venv, install-dev, build, check_folder ]
+    desc: Run tests on the application
+    cmds:
+      - task: install-dependencies
+        vars:
+          PACKAGE: dist/{{ .NAME }}-*.tar.gz
+      - >
+        {{ .PYTEST_BIN }}
+        tests
+      - task: uninstall-package
+        vars:
+          PACKAGE: "{{ .NAME }}"
+
+  package_check:
+    internal: true
+    deps: [ venv, install-dev, build ]
+    desc: Run package checks before publishing
+    cmds:
+      - >
+        {{ .TWINE_BIN }}
+        check
+        dist/*
+
+  check:
+    deps: [ lint, package_check ]
+    desc: Run all checks before publishing
+
+  publish:
+    internal: true
+    deps: [ venv, install-dev, build, check ]
+    desc: Publish the package to the repository
+    cmds:
+      - >
+        {{ .TWINE_BIN }}
+        upload
+        --config-file .pypirc
+        -r "{{ .REPOSITORY }}"
+        dist/*
+
+  publish-dev:
+    desc: Publish the package to the test repository
+    cmds:
+      - task: publish
+        vars:
+          REPOSITORY: testpypi
+
+  publish-prod:
+    desc: Publish the package to the production repository
+    cmds:
+      - task: publish
+        vars:
+          REPOSITORY: pypi
+
+  clean:
+    desc: Clean all the crappy files
+    cmds:
+      - >
+        rm
+        -rf
+        build
+        dist
+        "{{ .VENV_DIR }}"
+        .task
+        lib/*.egg-info
+        "{{ .CHECKS_DIR }}"
+        .pytest_cache
+
+  run-dev:
+    deps: [ install ]
+    desc: Run the application in development mode
+    env:
+      PYTHONPATH: lib
+    cmds:
+      - >
+        {{ .PYTHON_BIN }}
+        scripts/laflem
+        {{ .CLI_ARGS }}
+
+  run:
+    deps: [ build ]
+    desc: Run the application in production mode
+    cmds:
+      - task: uninstall-package
+        vars:
+          PACKAGE: "{{ .NAME }}"
+      - task: install-dependencies
+        vars:
+          PACKAGE: dist/{{ .NAME }}-*.tar.gz
+      - >
+        {{ .FLEM_BIN }} {{ .CLI_ARGS }}
+      - task: uninstall-package
+        vars:
+          PACKAGE: "{{ .NAME }}"
+
+  ci:
+    deps: [ check, test ]
+    desc: Run all checks and tests in CI mode
