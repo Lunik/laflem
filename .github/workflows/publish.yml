@@ -38,6 +38,6 @@ jobs:
 
       - name: Run Publish prod Task
         run: task publish-prod
-        if: github.ref == 'refs/tags/v*'
+        if: startsWith(github.ref, 'refs/tags/v')
         env:
           TWINE_PASSWORD: "${{ secrets.TWINE_PASSWORD_PROD }}"
