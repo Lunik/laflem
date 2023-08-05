@@ -11,7 +11,7 @@ from laflem.log import error_console
 from .collections.base import BaseCollection
 from .collections.git import GitCollection
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 
 class FlemParser(argparse.ArgumentParser):
   '''
