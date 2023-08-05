@@ -4,6 +4,7 @@ Define all tool functions to handle requirements.
 import subprocess
 import sys
 import importlib
+import re
 from importlib_metadata import requires
 from rich.prompt import Confirm
 
@@ -16,10 +17,11 @@ def install_extra_requirements(extra):
   '''
   Install extra requirements from this package.
   '''
+  pattern = fr""".*; extra == ['"]{re.escape(extra)}['"]"""
 
   requirements = []
   for requirement in requires(__package_name__):
-    if requirement.endswith(f'; extra == "{extra}"'):
+    if re.match(pattern, requirement):
       requirements.append(requirement.split(';')[0])
 
   if len(requirements) <= 0:
