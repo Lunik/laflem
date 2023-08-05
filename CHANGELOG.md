@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.1.2
+
+### Fixes
+
+- Fix error message interpolation when CLI parsing fails
+
+
 ## v0.1.1
 
 ### Fixes

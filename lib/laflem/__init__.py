@@ -21,7 +21,7 @@ class FlemParser(argparse.ArgumentParser):
     '''
     Print an error message and exit.
     '''
-    error_console.print("error: {message}\n", style="bold red")
+    error_console.print(f"error: {message}\n", style="bold red")
     self.print_help()
     sys.exit(2)
 
