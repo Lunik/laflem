@@ -14,10 +14,16 @@ pip install --user laflem
 
 ## Usage
 
-To use LaFlem, simply run the following command:
+To use LaFlem, simply run the following command :
 
 ```bash
-laflem
+laflem --help
+```
+
+or with the alias :
+
+```bash
+lf --help
 ```
 
 ## Contributing
