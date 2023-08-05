@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v0.1.2
+
+### Fixes
+
+- Fix error message interpolation when CLI parsing fails
+- Fix extra packages during module requirements installation
+
+
 ## v0.1.1
 
 ### Fixes

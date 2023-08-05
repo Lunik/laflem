@@ -11,7 +11,7 @@ from laflem.log import error_console
 from .collections.base import BaseCollection
 from .collections.git import GitCollection
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 class FlemParser(argparse.ArgumentParser):
   '''
@@ -21,7 +21,7 @@ class FlemParser(argparse.ArgumentParser):
     '''
     Print an error message and exit.
     '''
-    error_console.print("error: {message}\n", style="bold red")
+    error_console.print(f"error: {message}\n", style="bold red")
     self.print_help()
     sys.exit(2)
 
