@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.2.0
+
+### Fixes
+
+- Add lint on `setup.py` file
+
+
 ## v0.1.2
 
 ### Fixes

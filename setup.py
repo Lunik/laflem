@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# pylint: disable=missing-docstring
 import os
 from setuptools import setup, find_packages
 
@@ -6,18 +7,18 @@ from setuptools import setup, find_packages
 def get_version():
   """Get version from __init__.py file."""
   filename = os.path.join(os.path.dirname(__file__), 'lib', 'laflem', '__init__.py')
-  with open(filename) as f:
-    for line in f:
+  with open(filename, encoding="UTF-8") as file:
+    for line in file:
       if line.startswith('__version__'):
-        return eval(line.split('=')[-1])
-      
+        return eval(line.split('=')[-1]) # pylint: disable=eval-used
+
   raise ValueError(f"No __version__ defined in {filename}")
 
 setup(
   name='laflem',
   version=get_version(),
   description='Tools collection',
-  long_description=open('README.md').read(),
+  long_description=open('README.md', encoding='UTF-8').read(), # pylint: disable=consider-using-with
   author='Guillaume MARTINEZ',
   author_email='lunik@tiwabbit.fr',
   maintainer='Guillaume MARTINEZ',
