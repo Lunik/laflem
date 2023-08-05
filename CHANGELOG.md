@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.1.1
+
+### Fixes
+
+- Update package version to prevent Pypi conflict error during upload
+
+
 ## v0.1.0
 
 ### Features
