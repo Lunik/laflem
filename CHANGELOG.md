@@ -2,6 +2,11 @@
 
 ## v0.2.0
 
+### Features
+
+- Upgrade the `git.setup` module :
+  - Add new aliases for `git` commands : `plr`, `rh`, `t`
+
 ### Fixes
 
 - Add lint on `setup.py` file

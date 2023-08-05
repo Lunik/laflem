@@ -16,7 +16,7 @@ class GitSetupModule(HelloWorldModule):
   '''
   name = "setup"
   description = "Init Git setup module."
-  version = "0.1.0"
+  version = "0.2.0"
   extra_dependencies = 'git'
 
   def __init__(self):
@@ -138,6 +138,9 @@ class GitSetupModule(HelloWorldModule):
         ('alias', 'sh', 'str', 'stash'),
         ('alias', 'plh', 'str', '!git pull --rebase && git push'),
         ('alias', 'dp', 'str', '!git add . && git commit --signoff -m \'Dev\' && git push'),
+        ('alias', 'plr', 'str', '!git pull --rebase origin master'),
+        ('alias', 'rh', 'str', '!git reset --hard'),
+        ('alias', 't', 'str', 'tag'),
       ]
 
     for section, key, valut_type, default_value in params:
