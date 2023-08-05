@@ -1,6 +1,6 @@
 ---
 
-name: Publish dev
+name: Publish
 
 # Controls when the workflow will run
 on:
