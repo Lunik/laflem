@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+import os
+import sys
+
+from laflem import Flem
+from laflem.log import console, error_console
+from laflem.exceptions.base import FlemException
+
+if __name__ == '__main__':
+  #print("Hello, World!")
+
+  #file_path = os.path.join(sys.prefix, 'configs/laflem/base.yml')
+  #with open(file_path, 'r') as f:
+  #  print(f.read())
+
+  f = Flem()
+  args = f.parser.parse_args()
+  
+  try:
+    if args.collection:
+      collection = f.get_collection(args.collection)
+      if args.module:
+        module = collection.get_module(args.module)
+
+        module.run(**args.__dict__)
+        sys.exit(0)
+
+  except Exception as e:
+    if isinstance(e, FlemException):
+      error_console.print(e, style="bold red")
+    else:
+      error_console.print_exception()
+
+    sys.exit(1)
