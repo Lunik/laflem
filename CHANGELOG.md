@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.2.1
+
+### Fixes
+
+- Add missing `requests` dependency
+
+
 ## v0.2.0
 
 ### Features

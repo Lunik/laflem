@@ -42,6 +42,7 @@ setup(
   install_requires = [
     "rich==13.*",
     "importlib_metadata==6.*",
+    "requests==2.*",
   ],
   extras_require={
     'dev': [
