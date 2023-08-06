@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## v0.2.0
+
+### Features
+
+- Upgrade the `git.setup` module :
+ - Add new aliases for `git` commands : `plr`, `rh`, `t`
+- Add a new `lf` alias binary
+- Display binary & module versions when printing the help message
+- Add `macos` collection with `homebrew-setup`, `homebrew-upgrade`, `homebrew-cleanup` modules
+
+### Changes
+
+- Move the `laflem` script to a package "entry point"
+- Move `git` collection constants outside of module files
+
+### Fixes
+
+- Add lint on `setup.py` file
+
+
 ## v0.1.2
 
 ### Fixes

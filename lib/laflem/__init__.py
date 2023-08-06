@@ -1,67 +1,39 @@
 '''
-Root module for laflem
+Main module for laflem
 '''
-
 import sys
-import argparse
 
-from laflem.exceptions import CollectionNotFound
-from laflem.log import error_console
+from .flem import Flem
+from .exceptions import FlemException
+from .log import error_console
 
-from .collections.base import BaseCollection
-from .collections.git import GitCollection
+__version__ = '0.2.0'
 
-__version__ = '0.1.2'
-
-class FlemParser(argparse.ArgumentParser):
+def main():
   '''
-  Custom python parser for laflem.
+  Main function for laflem.
   '''
-  def error(self, message):
-    '''
-    Print an error message and exit.
-    '''
-    error_console.print(f"error: {message}\n", style="bold red")
-    self.print_help()
-    sys.exit(2)
+  flem = Flem(
+    version=__version__
+  )
+  args = flem.parser.parse_args()
 
-class Flem:
-  '''
-  Root class for laflem.
-  '''
-  collections = {
-    'base': BaseCollection,
-    'git': GitCollection,
-  }
+  try:
+    if args.collection:
+      collection = flem.get_collection(args.collection)
+      if args.module:
+        module = collection.get_module(args.module)
 
-  def get_collection(self, name):
-    '''
-    Return an instance of the requested collection if it exists.
-    Else raise a CollectionNotFound exception.
-    '''
-    if name in self.collections:
-      return self.collections[name]()
+        module.run(**args.__dict__)
+        sys.exit(0)
 
-    raise CollectionNotFound(name)
+  except Exception as error: # pylint: disable=broad-except
+    if isinstance(error, FlemException):
+      error_console.print(error, style="bold red")
+    else:
+      error_console.print_exception()
 
-  @property
-  def parser(self):
-    '''
-    Construct the parser for laflem.
-    Returns an instance of FlemParser.
-    '''
-    parser = FlemParser(description='Process some integers.')
+    sys.exit(1)
 
-    subparsers = parser.add_subparsers(help='collection', dest='collection')
-    subparsers.required = True
-    for collection in self.collections.values():
-      collection_parser = subparsers.add_parser(collection.name, help=collection.description)
-      collection.build_parser(collection_parser)
-
-      collection_subparsers = collection_parser.add_subparsers(help='module', dest='module')
-      collection_subparsers.required = True
-      for module in collection.modules.values():
-        module_parser = collection_subparsers.add_parser(module.name, help=module.description)
-        module.build_parser(module_parser)
-
-    return parser
+if __name__ == '__main__':
+  main()
