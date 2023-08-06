@@ -10,6 +10,7 @@ from .log import error_console
 
 from .collections.base import BaseCollection
 from .collections.git import GitCollection
+from .collections.macos import MacOSCollection
 
 class FlemParser(argparse.ArgumentParser):
   '''
@@ -30,6 +31,7 @@ class Flem:
   collections = {
     'base': BaseCollection,
     'git': GitCollection,
+    'mac': MacOSCollection,
   }
 
   def __init__(self, version):

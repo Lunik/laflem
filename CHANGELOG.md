@@ -8,6 +8,7 @@
  - Add new aliases for `git` commands : `plr`, `rh`, `t`
 - Add a new `lf` alias binary
 - Display binary & module versions when printing the help message
+- Add `macos` collection with `homebrew-setup`, `homebrew-upgrade`, `homebrew-cleanup` modules
 
 ### Changes
 
