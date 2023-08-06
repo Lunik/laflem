@@ -9,6 +9,7 @@ from laflem.log import console
 from laflem.collections.base.helloworld import HelloWorldModule
 
 from laflem.tools.requirements import load_git_library
+from .const import GIT_DEFAULT_CONFIG_PARAMS, GIT_GPP_CONFIG_PARAMS, GIT_ALIASES_PARAMS
 
 class GitSetupModule(HelloWorldModule):
   '''
@@ -95,53 +96,13 @@ class GitSetupModule(HelloWorldModule):
     console.print(f"Updating [bold green]{config_type}[/] Git configuration located in [bold blue]{config_path}[/]")
     config = self.git.GitConfigParser(config_path, read_only=False)
 
-    params = [
-      ('user', 'name', 'str', None),
-      ('user', 'email', 'str', None),
-      ('core', 'editor', 'str', 'vim'),
-      ('core', 'pager', 'str', 'less'),
-      ('core', 'autocrlf', 'str', 'input'),
-      ('init', 'defaultBranch', 'str', 'master'),
-      ('fetch', 'prune', 'bool', True),
-      ('pull', 'rebase', 'bool', True),
-      ('merge', 'ff', 'bool', True),
-      ('push', 'autoSetupRemote', 'bool', True),
-      ('push', 'rebase', 'str', 'preserve'),
-    ]
+    params = GIT_DEFAULT_CONFIG_PARAMS
 
     if Confirm.ask("Do you want to update the [bold green]GPG signature[/] config ?", default=False):
-      params += [
-        ('user', 'signingkey', 'str', None),
-        ('commit', 'gpgsign', 'bool', True),
-        ('tag', 'gpgsign', 'bool', True),
-        ('push', 'gpgsign', 'bool', False),
-        ('log', 'showSignature', 'bool', False),
-        ('gpg', 'program', 'str', 'gpg2'),
-      ]
+      params += GIT_GPP_CONFIG_PARAMS
 
     if Confirm.ask("Do you want to setup aliases ?", default=True):
-      signoff = Confirm.ask("Do all commits include a [bold green]SignOff[/] ?", default=True)
-      signoff_str = '--signoff' if signoff else ''
-
-      params += [
-        ('alias', 'co', 'str', f"commit {signoff_str}"),
-        ('alias', 'lo', 'str', 'log'),
-        ('alias', 'st', 'str', 'status'),
-        ('alias', 'ph', 'str', 'push'),
-        ('alias', 'pl', 'str', 'pull'),
-        ('alias', 'a', 'str', 'add'),
-        ('alias', 'df', 'str', 'diff'),
-        ('alias', 'ck', 'str', 'checkout'),
-        ('alias', 'mr', 'str', f"merge {signoff_str}"),
-        ('alias', 'cp', 'str', f"cherry-pick {signoff_str}"),
-        ('alias', 'br', 'str', 'branch'),
-        ('alias', 'sh', 'str', 'stash'),
-        ('alias', 'plh', 'str', '!git pull --rebase && git push'),
-        ('alias', 'dp', 'str', '!git add . && git commit --signoff -m \'Dev\' && git push'),
-        ('alias', 'plr', 'str', '!git pull --rebase origin master'),
-        ('alias', 'rh', 'str', '!git reset --hard'),
-        ('alias', 't', 'str', 'tag'),
-      ]
+      params += GIT_ALIASES_PARAMS
 
     for section, key, valut_type, default_value in params:
       self._update_git_config_value(config, section, key, valut_type, default_value)

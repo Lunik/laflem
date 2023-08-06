@@ -12,6 +12,7 @@
 ### Changes
 
 - Move the `laflem` script to a package "entry point"
+- Move `git` collection constants outside of module files
 
 ### Fixes
 
