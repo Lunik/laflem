@@ -12,6 +12,16 @@ To install LaFlem, simply run the following command:
 pip install --user laflem
 ```
 
+or with an isolated environment:
+
+```bash
+python -m venv ~/bin/laflem_venv
+~/bin/laflem_venv/bin/pip install laflem
+
+ln -s ~/bin/laflem_venv/bin/laflem ~/bin/laflem
+ln -s ~/bin/laflem_venv/bin/lf ~/bin/lf
+```
+
 ## Usage
 
 To use LaFlem, simply run the following command :
