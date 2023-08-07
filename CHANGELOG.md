@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.3.0
+
+### Features
+
+- Add `self` collection with `upgrade` module
+
+
 ## v0.2.1
 
 ### Fixes
