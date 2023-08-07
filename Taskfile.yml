@@ -12,6 +12,7 @@ vars:
   PYLINT_BIN: "{{ .VENV_DIR }}/bin/pylint"
   TWINE_BIN: "{{ .VENV_DIR }}/bin/twine"
   FLEM_BIN: "{{ .VENV_DIR }}/bin/laflem"
+  COVERAGE_BIN: "{{ .VENV_DIR }}/bin/coverage"
 
 tasks:
   venv:
@@ -134,11 +135,34 @@ tasks:
         vars:
           PACKAGE: dist/{{ .NAME }}-*.tar.gz
       - >
-        {{ .PYTEST_BIN }}
-        tests
+        {{ .PYTHON_BIN }}
+        -m pytest
+        -v
+        -n 4
+        --cov={{ .NAME }}
+        --junitxml="{{ .CHECKS_DIR }}/result.xml"
+        --html="{{ .CHECKS_DIR }}/report.html"
+        "tests/{{ .NAME }}"
+      - >
+        {{ .COVERAGE_BIN }}
+        html
+        -d "{{ .CHECKS_DIR }}/htmlcov"
+      - >
+        {{ .COVERAGE_BIN }}
+        xml
+        -o "{{ .CHECKS_DIR }}/coverage.xml"
       - task: uninstall-package
         vars:
           PACKAGE: "{{ .NAME }}"
+      - open "{{ .CHECKS_DIR }}/report.html"
+      - open "{{ .CHECKS_DIR }}/htmlcov/index.html"
+    sources:
+      - lib/**/*
+      - tests/**/*
+      - setup.py
+    generates:
+      - "{{ .CHECKS_DIR }}/result.xml"
+      - "{{ .CHECKS_DIR }}/coverate.xml"
 
   package_check:
     internal: true
@@ -193,6 +217,7 @@ tasks:
         lib/*.egg-info
         "{{ .CHECKS_DIR }}"
         .pytest_cache
+        .coverage
 
   run-dev:
     deps: [ install ]

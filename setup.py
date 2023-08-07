@@ -50,6 +50,11 @@ setup(
       'twine',
       'build',
       'pytest',
+      'pytest-cov',
+      'pytest-html',
+      'pytest-xdist',
+      'pytest-helpers-namespace',
+      'pytest-order',
       'wheel',
     ],
     'git': [
