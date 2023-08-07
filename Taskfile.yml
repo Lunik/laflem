@@ -86,6 +86,7 @@ tasks:
     deps: [ venv, install-dev ]
     desc: Build and compile the application
     cmds:
+      - rm -rf dist
       - >
         {{ .PYTHON_BIN }}
         -m build

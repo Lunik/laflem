@@ -6,6 +6,10 @@
 
 - Add `self` collection with `upgrade` module
 
+### Fixes
+
+- Ensure that all `dist` files are removed before building a new one
+
 
 ## v0.2.1
 
