@@ -16,9 +16,3 @@ class MacOSCollection(BaseCollection):
     "homebrew-upgrade": HomebrewUpgradeModule,
     "homebrew-cleanup": HomebrewCleanupModule,
   }
-
-  @classmethod
-  def build_parser(cls, parser):
-    '''
-    Add arguments to the parser or options.
-    '''

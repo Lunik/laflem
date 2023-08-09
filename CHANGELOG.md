@@ -5,6 +5,7 @@
 ### Features
 
 - Add `self` collection with `upgrade` module
+- Add `python` collection with `venv-create`, `venv-cleanup` modules
 
 ### Fixes
 

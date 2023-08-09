@@ -12,6 +12,7 @@ from .collections.base import BaseCollection
 from .collections.git import GitCollection
 from .collections.macos import MacOSCollection
 from .collections.self import SelfCollection
+from .collections.python import PythonCollection
 
 class FlemParser(argparse.ArgumentParser):
   '''
@@ -34,6 +35,7 @@ class Flem:
     'git': GitCollection,
     'mac': MacOSCollection,
     'self': SelfCollection,
+    'py': PythonCollection,
   }
 
   def __init__(self, version):
