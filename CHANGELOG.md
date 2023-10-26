@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## v0.3.0
+
+### Features
+
+- Add `self` collection with `upgrade` module
+- Add `python` collection with `venv-create`, `venv-cleanup` modules
+
+### Fixes
+
+- Ensure that all `dist` files are removed before building a new one
+
+
 ## v0.2.1
 
 ### Fixes

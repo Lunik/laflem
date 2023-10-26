@@ -10,8 +10,10 @@ vars:
   PIP_BIN: "{{ .VENV_DIR }}/bin/pip3"
   PYTEST_BIN: "{{ .VENV_DIR }}/bin/pytest"
   PYLINT_BIN: "{{ .VENV_DIR }}/bin/pylint"
+  BLACK_BIN: "{{ .VENV_DIR }}/bin/black"
   TWINE_BIN: "{{ .VENV_DIR }}/bin/twine"
   FLEM_BIN: "{{ .VENV_DIR }}/bin/laflem"
+  COVERAGE_BIN: "{{ .VENV_DIR }}/bin/coverage"
 
 tasks:
   venv:
@@ -86,6 +88,7 @@ tasks:
     deps: [ venv, install-dev ]
     desc: Build and compile the application
     cmds:
+      - rm -rf dist
       - >
         {{ .PYTHON_BIN }}
         -m build
@@ -113,6 +116,13 @@ tasks:
     desc: Run pylint on the application
     cmds:
       - >
+        {{ .BLACK_BIN }}
+        --check
+        lib setup.py
+        | 
+        tee
+        "{{ .CHECKS_DIR }}/black.result.txt"
+      - >
         {{ .PYLINT_BIN }}
         lib setup.py
         | 
@@ -123,6 +133,7 @@ tasks:
       - tests/**/*
       - setup.py
     generates:
+      - "{{ .CHECKS_DIR }}/black.result.txt"
       - "{{ .CHECKS_DIR }}/pylint.result.txt"
 
   test:
@@ -133,11 +144,34 @@ tasks:
         vars:
           PACKAGE: dist/{{ .NAME }}-*.tar.gz
       - >
-        {{ .PYTEST_BIN }}
-        tests
+        {{ .PYTHON_BIN }}
+        -m pytest
+        -v
+        -n 4
+        --cov={{ .NAME }}
+        --junitxml="{{ .CHECKS_DIR }}/result.xml"
+        --html="{{ .CHECKS_DIR }}/report.html"
+        "tests/{{ .NAME }}"
+      - >
+        {{ .COVERAGE_BIN }}
+        html
+        -d "{{ .CHECKS_DIR }}/htmlcov"
+      - >
+        {{ .COVERAGE_BIN }}
+        xml
+        -o "{{ .CHECKS_DIR }}/coverage.xml"
       - task: uninstall-package
         vars:
           PACKAGE: "{{ .NAME }}"
+      #- open "{{ .CHECKS_DIR }}/report.html"
+      #- open "{{ .CHECKS_DIR }}/htmlcov/index.html"
+    sources:
+      - lib/**/*
+      - tests/**/*
+      - setup.py
+    generates:
+      - "{{ .CHECKS_DIR }}/result.xml"
+      - "{{ .CHECKS_DIR }}/coverate.xml"
 
   package_check:
     internal: true
@@ -192,6 +226,7 @@ tasks:
         lib/*.egg-info
         "{{ .CHECKS_DIR }}"
         .pytest_cache
+        .coverage
 
   run-dev:
     deps: [ install ]

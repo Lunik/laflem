@@ -6,3 +6,5 @@ dist
 .task
 .pytest_cache
 .checks
+.coverage
+.DS_Store
