@@ -163,8 +163,8 @@ tasks:
       - task: uninstall-package
         vars:
           PACKAGE: "{{ .NAME }}"
-      - open "{{ .CHECKS_DIR }}/report.html"
-      - open "{{ .CHECKS_DIR }}/htmlcov/index.html"
+      #- open "{{ .CHECKS_DIR }}/report.html"
+      #- open "{{ .CHECKS_DIR }}/htmlcov/index.html"
     sources:
       - lib/**/*
       - tests/**/*
