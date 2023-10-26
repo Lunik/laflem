@@ -5,6 +5,7 @@
 ### Features
 
 - Add `venv-list` module to `python` collection
+- Add `venv-delete` module to `python` collection
 
 
 ## v0.3.0
