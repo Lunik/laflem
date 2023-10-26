@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v0.4.0
+
+### Features
+
+- Add `venv-list` module to `python` collection
+- Add `venv-delete` module to `python` collection
+
+
 ## v0.3.0
 
 ### Features
