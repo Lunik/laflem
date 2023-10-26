@@ -1,4 +1,4 @@
-'''
+"""
 Self module constants.
-'''
-PACKAGE_NAME = 'laflem'
+"""
+PACKAGE_NAME = "laflem"

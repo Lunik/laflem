@@ -1,8 +1,9 @@
-'''
+"""
 Define default laflem exceptions.
-'''
+"""
+
 
 class FlemException(Exception):
-  '''
-  Base laflem exception.
-  '''
+    """
+    Base laflem exception.
+    """

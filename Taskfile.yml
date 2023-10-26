@@ -10,6 +10,7 @@ vars:
   PIP_BIN: "{{ .VENV_DIR }}/bin/pip3"
   PYTEST_BIN: "{{ .VENV_DIR }}/bin/pytest"
   PYLINT_BIN: "{{ .VENV_DIR }}/bin/pylint"
+  BLACK_BIN: "{{ .VENV_DIR }}/bin/black"
   TWINE_BIN: "{{ .VENV_DIR }}/bin/twine"
   FLEM_BIN: "{{ .VENV_DIR }}/bin/laflem"
   COVERAGE_BIN: "{{ .VENV_DIR }}/bin/coverage"
@@ -115,6 +116,13 @@ tasks:
     desc: Run pylint on the application
     cmds:
       - >
+        {{ .BLACK_BIN }}
+        --check
+        lib setup.py
+        | 
+        tee
+        "{{ .CHECKS_DIR }}/black.result.txt"
+      - >
         {{ .PYLINT_BIN }}
         lib setup.py
         | 
@@ -125,6 +133,7 @@ tasks:
       - tests/**/*
       - setup.py
     generates:
+      - "{{ .CHECKS_DIR }}/black.result.txt"
       - "{{ .CHECKS_DIR }}/pylint.result.txt"
 
   test:
