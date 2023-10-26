@@ -68,6 +68,7 @@ tasks:
           PACKAGE: "{{ .NAME }}"
     sources:
       - setup.py
+      - lib/**/*
     generates:
       - "{{ .VENV_DIR }}/*"
 
