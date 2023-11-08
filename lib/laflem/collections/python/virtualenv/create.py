@@ -20,7 +20,7 @@ class VirtualenvCreateModule(HelloWorldModule):
 
     name = "venv-create"
     description = "Create Virtualenvs."
-    version = "0.1.0"
+    version = "0.2.0"
 
     @classmethod
     def build_parser(cls, parser):
@@ -49,6 +49,14 @@ class VirtualenvCreateModule(HelloWorldModule):
             dest="python_virtualenv_create_remove",
             help="Remove the virtualenv.",
         )
+        parser.add_argument(
+            "--interpreter",
+            "-i",
+            action="store",
+            dest="python_virtualenv_create_interpreter",
+            help="The Python interpreter to use, e.g. python3. Default is the interpreter of this process.",
+            default=sys.executable,
+        )
 
     def _main(self, *_args, **kwargs):
         """
@@ -68,11 +76,24 @@ class VirtualenvCreateModule(HelloWorldModule):
         if kwargs["python_virtualenv_create_remove"]:
             return
 
+        if not os.path.exists(kwargs["python_virtualenv_create_interpreter"]):
+            console.print(
+                f"[bold red]Python interpreter[/] [bold green]{kwargs['python_virtualenv_create_interpreter']}[/] does not exists."
+            )
+            sys.exit(1)
+
         if not os.path.exists(venv_path) or kwargs["python_virtualenv_create_force"]:
             console.print(
                 f"Creating [bold blue]Virtualenv[/] at [bold green]{venv_path}[/]"
             )
-            subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+            subprocess.check_call(
+                [
+                    kwargs["python_virtualenv_create_interpreter"],
+                    "-m",
+                    "venv",
+                    venv_path,
+                ]
+            )
         else:
             console.print(
                 f"[bold red]Virtualenv[/] already exists at [bold green]{venv_path}[/]"
