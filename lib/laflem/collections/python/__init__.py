@@ -8,6 +8,7 @@ from .virtualenv import (
     VirtualenvCreateModule,
     VirtualenvListModule,
     VirtualenvDeleteModule,
+    VirtualenvActivateModule,
 )
 
 
@@ -21,6 +22,7 @@ class PythonCollection(BaseCollection):
     modules = {
         "venv-create": VirtualenvCreateModule,
         "venv-list": VirtualenvListModule,
+        "venv-activate": VirtualenvActivateModule,
         "venv-delete": VirtualenvDeleteModule,
         "venv-cleanup": VirtualenvCleanupModule,
     }
