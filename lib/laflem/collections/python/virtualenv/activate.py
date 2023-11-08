@@ -1,10 +1,9 @@
 """
-Define the Virtualenv delete module.
-This module is used to delete a new virtualenv.
+Define the Virtualenv activate module.
+This module is used to activate a new virtualenv.
 """
 import os
 import sys
-import shutil
 
 from laflem.log import console
 from laflem.collections.base.helloworld import HelloWorldModule
@@ -12,13 +11,13 @@ from laflem.collections.base.helloworld import HelloWorldModule
 from .const import VIRTUALENV_DEFAULT_FOLDER_NAME, PACKAGE_NAME
 
 
-class VirtualenvDeleteModule(HelloWorldModule):
+class VirtualenvActivateModule(HelloWorldModule):
     """
-    The Virtualenv delete module.
+    The Virtualenv activate module.
     """
 
-    name = "venv-delete"
-    description = "Delete Virtualenvs."
+    name = "venv-activate"
+    description = "Activate Virtualenvs."
     version = "0.1.0"
 
     @classmethod
@@ -31,7 +30,7 @@ class VirtualenvDeleteModule(HelloWorldModule):
             "-n",
             action="store",
             required=True,
-            dest="python_virtualenv_delete_name",
+            dest="python_virtualenv_activate_name",
             help="The name of the virtualenv.",
         )
 
@@ -40,15 +39,15 @@ class VirtualenvDeleteModule(HelloWorldModule):
         Core the module.
         """
         # pylint: disable=line-too-long
-        venv_path = f"{os.path.expanduser('~')}/.{PACKAGE_NAME}/python/{VIRTUALENV_DEFAULT_FOLDER_NAME}/{kwargs['python_virtualenv_delete_name']}"
+        venv_path = f"{os.path.expanduser('~')}/.{PACKAGE_NAME}/python/{VIRTUALENV_DEFAULT_FOLDER_NAME}/{kwargs['python_virtualenv_activate_name']}"
 
         if not os.path.exists(venv_path):
             console.print(
-                f"No [bold red]Virtualenv[/] with name [bold green]{kwargs['python_virtualenv_delete_name']}[/] found."
+                f"No [bold red]Virtualenv[/] with name [bold green]{kwargs['python_virtualenv_activate_name']}[/] found."
             )
             sys.exit(1)
 
         console.print(
-            f"Deleting [bold blue]Virtualenv[/] with name [bold green]{kwargs['python_virtualenv_delete_name']}[/]"
+            f"To activating [bold blue]Virtualenv[/] at [bold green]{venv_path}[/] run :"
         )
-        shutil.rmtree(venv_path)
+        console.print(f"\n  > source {venv_path}/bin/activate\n")
