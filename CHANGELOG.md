@@ -6,6 +6,8 @@
 
 - [python][venv-create] Allow to specify a custom Python interpreter when creating virtual env with `--interpreter`
 - Add `venv-activate` module to `python` collection
+- Add `cache-clear` module to `python` collection
+
 
 ## v0.4.0
 

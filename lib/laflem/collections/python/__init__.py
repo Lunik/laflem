@@ -10,6 +10,7 @@ from .virtualenv import (
     VirtualenvDeleteModule,
     VirtualenvActivateModule,
 )
+from .clear_cache import PythonCacheClearModule
 
 
 class PythonCollection(BaseCollection):
@@ -25,4 +26,5 @@ class PythonCollection(BaseCollection):
         "venv-activate": VirtualenvActivateModule,
         "venv-delete": VirtualenvDeleteModule,
         "venv-cleanup": VirtualenvCleanupModule,
+        "cache-clear": PythonCacheClearModule,
     }
