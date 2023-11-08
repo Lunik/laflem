@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.5.0
+
+### Features
+
+- [python][venv-create] Allow to specify a custom Python interpreter when creating virtual env with `--interpreter`
+
+
 ## v0.4.0
 
 ### Features
