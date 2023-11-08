@@ -14,7 +14,7 @@ from .const import VIRTUALENV_DEFAULT_FOLDER_NAME, PACKAGE_NAME
 
 class VirtualenvDeleteModule(HelloWorldModule):
     """
-    The Virtualenv create module.
+    The Virtualenv delete module.
     """
 
     name = "venv-delete"
